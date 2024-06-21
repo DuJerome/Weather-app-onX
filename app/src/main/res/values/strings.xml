@@ -1,3 +1,4 @@
-<resources>
+<resources xmlns:tools="http://schemas.android.com/tools">
     <string name="app_name">Weather</string>
+    <string name="mapbox_access_token" translatable="false" tools:ignore="UnusedResources">"pk.eyJ1IjoiZHVzaGFuZXMiLCJhIjoiY2x4bmYwMHFxMDJzNTJsb2p0bDM5NnBhaiJ9.CsVhSPQzpr2Gn1_vLiGuDA"</string>
 </resources>
