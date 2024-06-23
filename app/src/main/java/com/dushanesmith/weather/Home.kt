@@ -2,7 +2,11 @@ package com.dushanesmith.weather
 
 import android.os.Bundle
 import android.widget.Toast
-import androidx.appcompat.app.AppCompatActivity
+import androidx.activity.viewModels
+import androidx.fragment.app.FragmentActivity
+import androidx.recyclerview.widget.LinearLayoutManager
+import androidx.recyclerview.widget.RecyclerView
+import com.dushane.weather.data.weather.Daily
 import com.mapbox.android.core.permissions.PermissionsListener
 import com.mapbox.android.core.permissions.PermissionsManager
 import com.mapbox.common.MapboxOptions
@@ -11,17 +15,43 @@ import com.mapbox.maps.CameraOptions
 import com.mapbox.maps.MapInitOptions
 import com.mapbox.maps.MapView
 import com.mapbox.maps.Style
+import com.mapbox.maps.plugin.Plugin
+import com.mapbox.maps.plugin.gestures.OnMapClickListener
+import com.mapbox.maps.plugin.gestures.addOnMapClickListener
+import dagger.hilt.android.AndroidEntryPoint
 
-class Home : AppCompatActivity(), PermissionsListener {
+@AndroidEntryPoint
+class Home : FragmentActivity(), PermissionsListener {
+    val homeViewModel by viewModels<HomeViewModel>()
     lateinit var permissionsManager: PermissionsManager
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        val mapInitOptions = setUpInitCameraOptions()
-        val mapView = MapView(this, mapInitOptions)
-        setContentView(mapView)
+        setContentView(R.layout.activity_home)
+
+        //val mapInitOptions = setUpInitCameraOptions()
+        //val mapView = MapView(this, mapInitOptions)
+        val mapView = findViewById<MapView>(R.id.mapView)
         setUpMapBox(mapView)
         askForLocationPermissions()
+
+        val weatherRecyclerViewAdapter = WeatherRecyclerViewAdapter()
+        val recyclerView = findViewById<RecyclerView>(R.id.recyclerViewWeather)
+        val linearLayoutManager = LinearLayoutManager(this)
+        linearLayoutManager.orientation = LinearLayoutManager.HORIZONTAL
+        recyclerView.setLayoutManager(linearLayoutManager);
+        recyclerView.adapter = weatherRecyclerViewAdapter
+
+        mapView.mapboxMap.addOnMapClickListener(object : OnMapClickListener {
+            override fun onMapClick(point: Point): Boolean {
+                weatherRecyclerViewAdapter.data = homeViewModel.getWeatherResults(
+                    point.latitude().toString(),
+                    point.longitude().toString()
+                ).daily as ArrayList<Daily>
+                weatherRecyclerViewAdapter.notifyDataSetChanged()
+                return true
+            }
+        })
     }
 
     fun setUpMapBox(mapView: MapView) {
@@ -36,8 +66,11 @@ class Home : AppCompatActivity(), PermissionsListener {
             .zoom(10.0)
             .bearing(0.0)
             .build()
+        Plugin.Mapbox(Plugin.MAPBOX_GESTURES_PLUGIN_ID)
+        val gesturePlugin = Plugin.Mapbox(Plugin.MAPBOX_GESTURES_PLUGIN_ID)
         val mapInitOptions = MapInitOptions(
             context = this,
+            plugins = listOf<Plugin>(gesturePlugin),
             cameraOptions = initialCameraOptions,
             textureView = true
         )

@@ -2,7 +2,8 @@ package com.dushanesmith.weather.dependencyinjection
 
 import com.dushanesmith.weather.HomeViewModel
 import com.dushanesmith.weather.data.HomeRepository
-import com.dushanesmith.weather.data.services.WeatherServices
+import com.dushanesmith.weather.data.HomeRepositoryImpl
+import com.dushanesmith.weather.data.api.WeatherAPI
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn
@@ -15,21 +16,21 @@ import javax.inject.Singleton
 class HomeViewModelModule {
     @Singleton
     @Provides
-    fun provideWeatherServices(retrofit: Retrofit): WeatherServices {
-        return retrofit.create(WeatherServices::class.java)
+    fun provideWeatherAPI(retrofit: Retrofit): WeatherAPI {
+        return retrofit.create(WeatherAPI::class.java)
     }
 
     @Singleton
     @Provides
     fun provideHomeRepository(
-        weatherServices: WeatherServices,
+        weatherAPI: WeatherAPI,
     ): HomeRepository {
-        return HomeRepository(weatherServices)
+        return HomeRepositoryImpl(weatherAPI)
     }
 
     @Singleton
     @Provides
-    fun provideHomeViewModel(homeRepository: HomeRepository): HomeViewModel {
-        return HomeViewModel(homeRepository)
+    fun provideHomeViewModel(homeRepositoryImpl: HomeRepositoryImpl): HomeViewModel {
+        return HomeViewModel(homeRepositoryImpl)
     }
 }
