@@ -5,8 +5,8 @@ import com.google.gson.annotations.SerializedName
 
 data class WeatherResults (
 
-  @SerializedName("lat"             ) var lat            : Int?                = null,
-  @SerializedName("lon"             ) var lon            : Int?                = null,
+  @SerializedName("lat"             ) var lat            : Double?                = null,
+  @SerializedName("lon"             ) var lon            : Double?                = null,
   @SerializedName("timezone"        ) var timezone       : String?             = null,
   @SerializedName("timezone_offset" ) var timezoneOffset : Int?                = null,
   @SerializedName("current"         ) var current        : Current?            = Current(),

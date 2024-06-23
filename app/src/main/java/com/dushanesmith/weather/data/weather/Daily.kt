@@ -11,6 +11,7 @@ data class Daily (
     @SerializedName("moonrise"   ) var moonrise  : Int?               = null,
     @SerializedName("moonset"    ) var moonset   : Int?               = null,
     @SerializedName("moon_phase" ) var moonPhase : Double?            = null,
+    @SerializedName("summary"    ) var summary   : String?            = null,
     @SerializedName("temp"       ) var temp      : Temp?              = Temp(),
     @SerializedName("feels_like" ) var feelsLike : FeelsLike?         = FeelsLike(),
     @SerializedName("pressure"   ) var pressure  : Int?               = null,
