@@ -43,11 +43,12 @@ class SavesRecyclerViewAdapter(
     }
 
     override fun onBindViewHolder(holder: ViewHolder, position: Int) {
+        val weatherSave = data[position]
         holder.locationName.text = data[position].location
         holder.closeButton.setOnClickListener {
-            homeViewModel.delete(data[position])
+            homeViewModel.delete(weatherSave)
             data = homeViewModel.getAllSaves()
-            notifyItemRemoved(position)
+            notifyDataSetChanged()
         }
 
         holder.itemView.setOnClickListener{
