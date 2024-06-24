@@ -21,8 +21,6 @@ class SavesRecyclerViewAdapter(
     class ViewHolder(itemView: View,val homeViewModel: HomeViewModel) : RecyclerView.ViewHolder(itemView) {
         val locationName = itemView.findViewById<TextView>(R.id.locationName)
         val closeButton = itemView.findViewById<ImageButton>(R.id.buttonClose)
-        fun bind(weatherSave: WeatherSave){
-        }
     }
 
     fun updateList(saves: Array<WeatherSave>){
@@ -45,8 +43,6 @@ class SavesRecyclerViewAdapter(
     }
 
     override fun onBindViewHolder(holder: ViewHolder, position: Int) {
-        holder.bind(data[position])
-
         holder.locationName.text = data[position].location
         holder.closeButton.setOnClickListener {
             homeViewModel.delete(data[position])
