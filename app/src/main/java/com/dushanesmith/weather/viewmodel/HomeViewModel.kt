@@ -28,8 +28,10 @@ class HomeViewModel @Inject constructor(
         val locationCity = locationWithAddress.results[0].addressComponents.find { it.types.contains("locality") }?.longName
         currentLocationCity = locationCity
         if(locationWithAddress.results.size == 0) return WeatherResults()
-        val cityLng = homeRepository.getLocationWithAddress(locationCity).blockingGet().results[0].geometry?.location?.lng
-        val cityLat = homeRepository.getLocationWithAddress(locationCity).blockingGet().results[0].geometry?.location?.lng
+        val locationResults = homeRepository.getLocationWithAddress(locationCity).blockingGet()
+        if (locationResults.results.size == 0) return WeatherResults()
+        val cityLat = locationResults.results[0].geometry?.location?.lat
+        val cityLng = locationResults.results[0].geometry?.location?.lng
         val data = homeRepository.getWeatherResults(cityLat.toString(), cityLng.toString()).blockingGet()
         _currentWeatherResults.compareAndSet(
             currentWeatherResults.value,
