@@ -39,7 +39,7 @@ class Home : FragmentActivity(), PermissionsListener {
         val weatherRecyclerViewAdapter = setupWeatherRecyclerView(binding)
         setUpMapBox(binding, weatherRecyclerViewAdapter)
         val savesRecyclerViewAdapter = setupSavesRecyclerView(binding, weatherRecyclerViewAdapter)
-        binding.saveButton.setOnClickListener {
+        binding.buttonSave.setOnClickListener {
             homeViewModel.insertSave(WeatherSave(location =homeViewModel.currentLocationCity, dailyList = weatherRecyclerViewAdapter.data))
         }
 
@@ -47,13 +47,13 @@ class Home : FragmentActivity(), PermissionsListener {
             override fun onNavigationItemSelected(item: MenuItem): Boolean {
                 if (item.itemId == R.id.checkWeatherForLocation){
                     binding.recyclerViewWeather.visibility = View.VISIBLE
-                    binding.saveButton.visibility = View.VISIBLE
+                    binding.buttonSave.visibility = View.VISIBLE
                     binding.recyclerViewSaves.visibility = View.GONE
                     binding.cardViewSaves.visibility = View.GONE
 
                 }else if(item.itemId == R.id.saveMenu){
                     binding.recyclerViewWeather.visibility = View.GONE
-                    binding.saveButton.visibility = View.GONE
+                    binding.buttonSave.visibility = View.GONE
                     binding.recyclerViewSaves.visibility = View.VISIBLE
                     binding.cardViewSaves.visibility = View.VISIBLE
                     savesRecyclerViewAdapter.updateList(homeViewModel.getAllSaves())
@@ -75,10 +75,10 @@ class Home : FragmentActivity(), PermissionsListener {
                 ).daily.toTypedArray()
                 weatherRecyclerViewAdapter.data =dailys
                 if(dailys.isEmpty()){
-                    binding.saveButton.visibility = View.GONE
+                    binding.buttonSave.visibility = View.GONE
                     binding.recyclerViewWeather.visibility = View.GONE
                 }else{
-                    binding.saveButton.visibility = View.VISIBLE
+                    binding.buttonSave.visibility = View.VISIBLE
                     binding.recyclerViewWeather.visibility = View.VISIBLE
                     binding.recyclerViewSaves.visibility = View.GONE
                     binding.cardViewSaves.visibility = View.GONE

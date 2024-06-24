@@ -19,7 +19,7 @@ class SavesRecyclerViewAdapter(
     var data = arrayOf<WeatherSave>()
 
     class ViewHolder(itemView: View,val homeViewModel: HomeViewModel) : RecyclerView.ViewHolder(itemView) {
-        val locationName = itemView.findViewById<TextView>(R.id.locationName)
+        val locationName = itemView.findViewById<TextView>(R.id.textViewName)
         val closeButton = itemView.findViewById<ImageButton>(R.id.buttonClose)
     }
 
