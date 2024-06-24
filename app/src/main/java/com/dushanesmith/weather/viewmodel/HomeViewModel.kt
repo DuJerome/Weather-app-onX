@@ -24,8 +24,10 @@ class HomeViewModel @Inject constructor(
 
     fun getWeatherResults(lat: String, lon: String): WeatherResults {
         val locationWithAddress = homeRepository.getLocationWithLatLng("$lat, $lon").blockingGet()
-        val locationCity = locationWithAddress.results[0].addressComponents.find { it.types.contains("administrative_area_level_2") }?.longName
+        if(locationWithAddress.results.size == 0) return WeatherResults()
+        val locationCity = locationWithAddress.results[0].addressComponents.find { it.types.contains("locality") }?.longName
         currentLocationCity = locationCity
+        if(locationWithAddress.results.size == 0) return WeatherResults()
         val cityLng = homeRepository.getLocationWithAddress(locationCity).blockingGet().results[0].geometry?.location?.lng
         val cityLat = homeRepository.getLocationWithAddress(locationCity).blockingGet().results[0].geometry?.location?.lng
         val data = homeRepository.getWeatherResults(cityLat.toString(), cityLng.toString()).blockingGet()
@@ -42,5 +44,9 @@ class HomeViewModel @Inject constructor(
 
     fun insertSave(save: WeatherSave) {
         weatherSavesRepository.insertSave(save)
+    }
+
+    fun delete(save: WeatherSave) {
+        weatherSavesRepository.delete((save))
     }
 }
