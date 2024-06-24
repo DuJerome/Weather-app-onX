@@ -1,5 +1,6 @@
 package com.dushanesmith.weather.viewmodel
 
+import android.util.Log
 import androidx.lifecycle.ViewModel
 import com.dushane.weather.data.weather.WeatherResults
 import com.dushanesmith.weather.data.repository.HomeRepository
@@ -24,12 +25,23 @@ class HomeViewModel @Inject constructor(
 
     fun getWeatherResults(lat: String, lon: String): WeatherResults {
         val locationWithAddress = homeRepository.getLocationWithLatLng("$lat, $lon").blockingGet()
-        if(locationWithAddress.results.size == 0) return WeatherResults()
+        if(locationWithAddress.results.size == 0) {
+            Log.e("WeatherAPI", "Unable to retrieve weather because of malformed search")
+            return WeatherResults()
+        }
         val locationCity = locationWithAddress.results[0].addressComponents.find { it.types.contains("locality") }?.longName
         currentLocationCity = locationCity
-        if(locationWithAddress.results.size == 0) return WeatherResults()
+
+        if(locationWithAddress.results.size == 0 || locationCity == null) {
+            Log.e("WeatherAPI", "Unable to retrieve weather because of malformed search")
+            return WeatherResults()
+        }
+
         val locationResults = homeRepository.getLocationWithAddress(locationCity).blockingGet()
-        if (locationResults.results.size == 0) return WeatherResults()
+        if (locationResults.results.size == 0) {
+            Log.e("WeatherAPI", "Unable to retrieve weather because of malformed search")
+            return WeatherResults()
+        }
         val cityLat = locationResults.results[0].geometry?.location?.lat
         val cityLng = locationResults.results[0].geometry?.location?.lng
         val data = homeRepository.getWeatherResults(cityLat.toString(), cityLng.toString()).blockingGet()
