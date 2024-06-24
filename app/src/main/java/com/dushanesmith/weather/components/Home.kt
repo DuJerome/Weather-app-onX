@@ -8,7 +8,6 @@ import android.widget.Toast
 import androidx.activity.viewModels
 import androidx.fragment.app.FragmentActivity
 import androidx.recyclerview.widget.LinearLayoutManager
-import com.dushane.weather.data.weather.Daily
 import com.dushanesmith.weather.R
 import com.dushanesmith.weather.components.adapters.SavesRecyclerViewAdapter
 import com.dushanesmith.weather.components.adapters.WeatherRecyclerViewAdapter
@@ -39,10 +38,9 @@ class Home : FragmentActivity(), PermissionsListener {
         askForLocationPermissions()
         val weatherRecyclerViewAdapter = setupWeatherRecyclerView(binding)
         setUpMapBox(binding, weatherRecyclerViewAdapter)
-        val savesRecyclerViewAdapter = setupSavesRecyclerView(binding)
-
+        val savesRecyclerViewAdapter = setupSavesRecyclerView(binding, weatherRecyclerViewAdapter)
         binding.saveButton.setOnClickListener {
-            homeViewModel.insertSave(WeatherSave(location =homeViewModel.currentLocationCity, dailyList = weatherRecyclerViewAdapter.data.toTypedArray()))
+            homeViewModel.insertSave(WeatherSave(location =homeViewModel.currentLocationCity, dailyList = weatherRecyclerViewAdapter.data))
         }
 
         binding.bottomNavigationView.setOnItemSelectedListener(object: OnItemSelectedListener{
@@ -51,11 +49,14 @@ class Home : FragmentActivity(), PermissionsListener {
                     binding.recyclerViewWeather.visibility = View.VISIBLE
                     binding.saveButton.visibility = View.VISIBLE
                     binding.recyclerViewSaves.visibility = View.GONE
+                    binding.cardViewSaves.visibility = View.GONE
 
                 }else if(item.itemId == R.id.saveMenu){
                     binding.recyclerViewWeather.visibility = View.GONE
                     binding.saveButton.visibility = View.GONE
                     binding.recyclerViewSaves.visibility = View.VISIBLE
+                    binding.cardViewSaves.visibility = View.VISIBLE
+                    savesRecyclerViewAdapter.updateList(homeViewModel.getAllSaves())
                 }
                 return true
             }
@@ -75,7 +76,7 @@ class Home : FragmentActivity(), PermissionsListener {
                 weatherRecyclerViewAdapter.data = homeViewModel.getWeatherResults(
                     point.latitude().toString(),
                     point.longitude().toString()
-                ).daily as ArrayList<Daily>
+                ).daily.toTypedArray()
 
                 weatherRecyclerViewAdapter.notifyDataSetChanged()
                 return true
@@ -83,10 +84,11 @@ class Home : FragmentActivity(), PermissionsListener {
         })
     }
 
-    fun setupSavesRecyclerView(binding: ActivityHomeBinding): SavesRecyclerViewAdapter {
-        val savesRecyclerViewAdapter = SavesRecyclerViewAdapter()
+    fun setupSavesRecyclerView(binding: ActivityHomeBinding, weatherRecyclerViewAdapter: WeatherRecyclerViewAdapter): SavesRecyclerViewAdapter {
+        val savesRecyclerViewAdapter = SavesRecyclerViewAdapter(homeViewModel, weatherRecyclerViewAdapter, binding.bottomNavigationView)
         val recyclerView = binding.recyclerViewSaves
         val linearLayoutManager = LinearLayoutManager(this)
+        linearLayoutManager.orientation = LinearLayoutManager.HORIZONTAL
         recyclerView.layoutManager = linearLayoutManager
         recyclerView.adapter = savesRecyclerViewAdapter
         return savesRecyclerViewAdapter

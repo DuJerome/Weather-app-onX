@@ -7,4 +7,6 @@ interface WeatherSavesRepository{
     fun getAllSaves(): Array<WeatherSave>
 
     fun insertSave(save: WeatherSave)
+
+    fun delete(save: WeatherSave)
 }

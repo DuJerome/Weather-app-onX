@@ -14,7 +14,7 @@ import java.util.Calendar
 
 
 class WeatherRecyclerViewAdapter: RecyclerView.Adapter<WeatherRecyclerViewAdapter.ViewHolder>() {
-    var data: ArrayList<Daily> = arrayListOf()
+    var data: Array<Daily> = arrayOf()
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {
         val view = LayoutInflater.from(parent.context)
             .inflate(R.layout.cardview_item_weather, parent, false)

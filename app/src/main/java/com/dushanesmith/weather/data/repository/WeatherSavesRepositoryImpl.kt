@@ -15,5 +15,7 @@ class WeatherSavesRepositoryImpl @Inject constructor(
         weatherSavesDatabase.weatherSaveDao().insert(save)
     }
 
-
+    override fun delete(save: WeatherSave) {
+        weatherSavesDatabase.weatherSaveDao().delete(save)
+    }
 }
