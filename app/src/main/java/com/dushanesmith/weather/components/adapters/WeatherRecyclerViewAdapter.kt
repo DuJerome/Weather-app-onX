@@ -39,12 +39,12 @@ class WeatherRecyclerViewAdapter: RecyclerView.Adapter<WeatherRecyclerViewAdapte
     }
 
     class ViewHolder(val context:Context, val itemView: View, val date: (timeToAdd: Int) -> String) : RecyclerView.ViewHolder(itemView){
-        val dateText = itemView.findViewById<TextView>(R.id.date)
-        val imageView = itemView.findViewById<ImageView>(R.id.weatherImage)
-        val currentTempResult = itemView.findViewById<TextView>(R.id.tempResult)
-        val weatherDescription = itemView.findViewById<TextView>(R.id.weatherDescription)
-        val windDirectionResult = itemView.findViewById<TextView>(R.id.windDirectionResult)
-        val windSpeedResult = itemView.findViewById<TextView>(R.id.windSpeedResult)
+        val dateText = itemView.findViewById<TextView>(R.id.textViewDate)
+        val imageView = itemView.findViewById<ImageView>(R.id.imageViewWeather)
+        val currentTempResult = itemView.findViewById<TextView>(R.id.textViewTempResult)
+        val weatherDescription = itemView.findViewById<TextView>(R.id.textViewWeatherDescription)
+        val windDirectionResult = itemView.findViewById<TextView>(R.id.textViewWindDirectionResult)
+        val windSpeedResult = itemView.findViewById<TextView>(R.id.textViewWindSpeedResult)
 
         fun bind(daily: Daily, position: Int){
             val imageUrl = "https://openweathermap.org/img/wn/${daily.weather.get(0).icon}@2x.png"

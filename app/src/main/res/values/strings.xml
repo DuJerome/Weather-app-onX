@@ -7,4 +7,5 @@
     <string name="day_temp">Day Temp:</string>
     <string name="wind_direction">Wind Direction:</string>
     <string name="wind_speed">Wind Speed:</string>
+    <string name="saves">SAVES</string>
 </resources>
