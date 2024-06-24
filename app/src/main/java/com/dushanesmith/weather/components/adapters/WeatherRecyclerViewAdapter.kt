@@ -51,7 +51,7 @@ class WeatherRecyclerViewAdapter: RecyclerView.Adapter<WeatherRecyclerViewAdapte
 
             Glide.with(context).load(imageUrl).into(imageView)
             dateText.text = date(position)
-            currentTempResult.text = daily.temp?.day.toString()
+            currentTempResult.text = daily.temp?.day.toString() + "°"
             weatherDescription.text = daily.summary.toString()
             windDirectionResult.text = daily.windDeg?.toString() + "°"
             windSpeedResult.text = daily.windSpeed?.toString()
