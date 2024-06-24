@@ -48,8 +48,9 @@ class SavesRecyclerViewAdapter(
         holder.bind(data[position])
 
         holder.locationName.text = data[position].location
-        holder.closeButton.setOnClickListener{
+        holder.closeButton.setOnClickListener {
             homeViewModel.delete(data[position])
+            data = homeViewModel.getAllSaves()
             notifyItemRemoved(position)
         }
 
