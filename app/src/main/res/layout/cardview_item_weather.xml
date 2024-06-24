@@ -41,7 +41,7 @@
             android:id="@+id/tempTitle"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="Day Temp:"
+            android:text="@string/day_temp"
             app:layout_constraintLeft_toLeftOf="parent"
             app:layout_constraintRight_toLeftOf="@id/tempResult"
             app:layout_constraintTop_toBottomOf="@id/weatherDescription"/>
@@ -57,7 +57,7 @@
             android:id="@+id/windDirectionTitle"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="Wind Direction:"
+            android:text="@string/wind_direction"
             app:layout_constraintLeft_toLeftOf="parent"
             app:layout_constraintRight_toLeftOf="@id/windDirectionResult"
             app:layout_constraintTop_toBottomOf="@id/tempTitle"/>
@@ -72,7 +72,7 @@
             android:id="@+id/windSpeedTitle"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="Wind Speed: "
+            android:text="@string/wind_speed"
             app:layout_constraintLeft_toLeftOf="parent"
             app:layout_constraintRight_toLeftOf="@id/windSpeedResult"
             app:layout_constraintTop_toBottomOf="@id/windDirectionTitle"/>

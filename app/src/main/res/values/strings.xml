@@ -1,4 +1,10 @@
 <resources xmlns:tools="http://schemas.android.com/tools">
     <string name="app_name">Weather</string>
     <string name="mapbox_access_token" translatable="false" tools:ignore="UnusedResources">"pk.eyJ1IjoiZHVzaGFuZXMiLCJhIjoiY2x4bmYwMHFxMDJzNTJsb2p0bDM5NnBhaiJ9.CsVhSPQzpr2Gn1_vLiGuDA"</string>
+    <string name="save">SAVE</string>
+    <string name="location">Location:</string>
+    <string name="placeholder">placeholder</string>
+    <string name="day_temp">Day Temp:</string>
+    <string name="wind_direction">Wind Direction:</string>
+    <string name="wind_speed">Wind Speed:</string>
 </resources>
