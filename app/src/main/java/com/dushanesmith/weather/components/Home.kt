@@ -72,6 +72,7 @@ class Home : FragmentActivity(), PermissionsListener {
                 binding.saveButton.visibility = View.VISIBLE
                 binding.recyclerViewWeather.visibility = View.VISIBLE
                 binding.recyclerViewSaves.visibility = View.GONE
+                binding.cardViewSaves.visibility = View.GONE
 
                 weatherRecyclerViewAdapter.data = homeViewModel.getWeatherResults(
                     point.latitude().toString(),
