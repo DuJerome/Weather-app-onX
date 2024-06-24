@@ -8,13 +8,13 @@ import android.widget.TextView
 import androidx.recyclerview.widget.RecyclerView
 import com.dushanesmith.weather.R
 import com.dushanesmith.weather.data.weather.WeatherSave
+import com.dushanesmith.weather.databinding.ActivityHomeBinding
 import com.dushanesmith.weather.viewmodel.HomeViewModel
-import com.google.android.material.bottomnavigation.BottomNavigationView
 
 class SavesRecyclerViewAdapter(
+    val binding: ActivityHomeBinding,
     val homeViewModel: HomeViewModel,
     val weatherRecyclerViewAdapter: WeatherRecyclerViewAdapter,
-    val bottomNavigationView: BottomNavigationView
 ) : RecyclerView.Adapter<SavesRecyclerViewAdapter.ViewHolder>() {
     var data = arrayOf<WeatherSave>()
 
@@ -49,11 +49,14 @@ class SavesRecyclerViewAdapter(
             homeViewModel.delete(weatherSave)
             data = homeViewModel.getAllSaves()
             notifyDataSetChanged()
+            if(data.isEmpty()){
+                binding.bottomNavigationView.selectedItemId = R.id.checkWeatherForLocation
+            }
         }
 
         holder.itemView.setOnClickListener{
             weatherRecyclerViewAdapter.data = data[position].dailyList
-            bottomNavigationView.selectedItemId = R.id.checkWeatherForLocation
+            binding.bottomNavigationView.selectedItemId = R.id.checkWeatherForLocation
             weatherRecyclerViewAdapter.notifyDataSetChanged()
         }
     }

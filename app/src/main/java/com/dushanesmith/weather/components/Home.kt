@@ -29,6 +29,9 @@ class Home : FragmentActivity(), PermissionsListener {
     val homeViewModel by viewModels<HomeViewModel>()
     lateinit var binding: ActivityHomeBinding
     lateinit var permissionsManager: PermissionsManager
+    var lastLat: String? = null
+    var lastLon: String? = null
+    lateinit var weatherRecyclerViewAdapter: WeatherRecyclerViewAdapter
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -36,7 +39,7 @@ class Home : FragmentActivity(), PermissionsListener {
         setContentView(binding.root)
 
         askForLocationPermissions()
-        val weatherRecyclerViewAdapter = setupWeatherRecyclerView(binding)
+        weatherRecyclerViewAdapter = setupWeatherRecyclerView(binding)
         setUpMapBox(binding, weatherRecyclerViewAdapter)
         val savesRecyclerViewAdapter = setupSavesRecyclerView(binding, weatherRecyclerViewAdapter)
         binding.buttonSave.setOnClickListener {
@@ -63,17 +66,43 @@ class Home : FragmentActivity(), PermissionsListener {
         })
     }
 
+    override fun onSaveInstanceState(outState: Bundle) {
+        super.onSaveInstanceState(outState)
+        outState.putString("lastLat", lastLat)
+        outState.putString("lastLon", lastLon)
+        outState.putInt("currentlySelectedID", binding.bottomNavigationView.selectedItemId)
+    }
+
+    override fun onRestoreInstanceState(savedInstanceState: Bundle) {
+        super.onRestoreInstanceState(savedInstanceState)
+        binding.bottomNavigationView.selectedItemId = savedInstanceState.getInt("currentlySelectedID")
+        val lastLat = savedInstanceState.getString("lastLat")
+        val lastLon = savedInstanceState.getString("lastLon")
+        this.lastLat = lastLat
+        this.lastLon = lastLon
+        if (binding.bottomNavigationView.selectedItemId == R.id.checkWeatherForLocation && lastLat != null && lastLon != null){
+            val dailys = homeViewModel.getWeatherResults(
+                lastLat,
+                lastLon
+            ).daily.toTypedArray()
+            weatherRecyclerViewAdapter.data = dailys
+            weatherRecyclerViewAdapter.notifyDataSetChanged()
+        }
+    }
+
     fun setUpMapBox(binding: ActivityHomeBinding, weatherRecyclerViewAdapter: WeatherRecyclerViewAdapter) {
         MapboxOptions.accessToken = getString(R.string.mapbox_access_token)
         binding.mapView.mapboxMap.loadStyle(Style.MAPBOX_STREETS)
 
         binding.mapView.mapboxMap.addOnMapClickListener(object : OnMapClickListener {
             override fun onMapClick(point: Point): Boolean {
+                lastLat = point.latitude().toString()
+                lastLon = point.longitude().toString()
                 val dailys = homeViewModel.getWeatherResults(
                     point.latitude().toString(),
                     point.longitude().toString()
                 ).daily.toTypedArray()
-                weatherRecyclerViewAdapter.data =dailys
+                weatherRecyclerViewAdapter.data = dailys
                 if(dailys.isEmpty()){
                     binding.buttonSave.visibility = View.GONE
                     binding.recyclerViewWeather.visibility = View.GONE
@@ -90,7 +119,7 @@ class Home : FragmentActivity(), PermissionsListener {
     }
 
     fun setupSavesRecyclerView(binding: ActivityHomeBinding, weatherRecyclerViewAdapter: WeatherRecyclerViewAdapter): SavesRecyclerViewAdapter {
-        val savesRecyclerViewAdapter = SavesRecyclerViewAdapter(homeViewModel, weatherRecyclerViewAdapter, binding.bottomNavigationView)
+        val savesRecyclerViewAdapter = SavesRecyclerViewAdapter(binding, homeViewModel, weatherRecyclerViewAdapter)
         val recyclerView = binding.recyclerViewSaves
         val linearLayoutManager = LinearLayoutManager(this)
         linearLayoutManager.orientation = LinearLayoutManager.HORIZONTAL
