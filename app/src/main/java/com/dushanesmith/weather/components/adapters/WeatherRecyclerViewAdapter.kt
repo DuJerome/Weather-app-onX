@@ -1,4 +1,4 @@
-package com.dushanesmith.weather
+package com.dushanesmith.weather.components.adapters
 
 import android.content.Context
 import android.view.LayoutInflater
@@ -9,6 +9,7 @@ import android.widget.TextView
 import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
 import com.dushane.weather.data.weather.Daily
+import com.dushanesmith.weather.R
 import java.util.Calendar
 
 
