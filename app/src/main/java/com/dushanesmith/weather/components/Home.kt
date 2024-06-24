@@ -69,16 +69,20 @@ class Home : FragmentActivity(), PermissionsListener {
 
         binding.mapView.mapboxMap.addOnMapClickListener(object : OnMapClickListener {
             override fun onMapClick(point: Point): Boolean {
-                binding.saveButton.visibility = View.VISIBLE
-                binding.recyclerViewWeather.visibility = View.VISIBLE
-                binding.recyclerViewSaves.visibility = View.GONE
-                binding.cardViewSaves.visibility = View.GONE
-
-                weatherRecyclerViewAdapter.data = homeViewModel.getWeatherResults(
+                val dailys = homeViewModel.getWeatherResults(
                     point.latitude().toString(),
                     point.longitude().toString()
                 ).daily.toTypedArray()
-
+                weatherRecyclerViewAdapter.data =dailys
+                if(dailys.isEmpty()){
+                    binding.saveButton.visibility = View.GONE
+                    binding.recyclerViewWeather.visibility = View.GONE
+                }else{
+                    binding.saveButton.visibility = View.VISIBLE
+                    binding.recyclerViewWeather.visibility = View.VISIBLE
+                    binding.recyclerViewSaves.visibility = View.GONE
+                    binding.cardViewSaves.visibility = View.GONE
+                }
                 weatherRecyclerViewAdapter.notifyDataSetChanged()
                 return true
             }
